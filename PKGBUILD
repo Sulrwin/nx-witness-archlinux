@@ -1,6 +1,22 @@
 # Maintainer: Network Optix
 pkgname=networkoptix-client
-pkgver=6.0.6
+
+# Function to get latest version info
+_get_latest_version() {
+    local update_page="https://updates.networkoptix.com/default/index.html"
+    local version_info=$(curl -s "$update_page" | grep -oP 'nxwitness-client-\K[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' | head -1)
+    if [[ -z "$version_info" ]]; then
+        echo "Error: Could not fetch version information" >&2
+        exit 1
+    fi
+    echo "$version_info"
+}
+
+# Get version dynamically
+_pkgver_full=$(_get_latest_version)
+pkgver=$(echo "$_pkgver_full" | cut -d. -f1-3)
+_build_number=$(echo "$_pkgver_full" | cut -d. -f4)
+
 pkgrel=1
 pkgdesc="Nx Witness Client"
 arch=('x86_64')
@@ -62,7 +78,7 @@ makedepends=('binutils')
 optdepends=()
 options=('!strip' '!emptydirs')
 
-source=("https://updates.networkoptix.com/default/41837/linux/nxwitness-client-6.0.6.41837-linux_x64.deb")
+source=("https://updates.networkoptix.com/default/$_build_number/linux/nxwitness-client-$_pkgver_full-linux_x64.deb")
 install=networkoptix-client.install
 sha256sums=('SKIP')
 
@@ -70,7 +86,7 @@ prepare() {
     # Extract the DEB file to get the files
     mkdir -p "${srcdir}/extracted"
     cd "${srcdir}/extracted"
-    ar x "${srcdir}/nxwitness-client-6.0.6.41837-linux_x64.deb"
+    ar x "${srcdir}/nxwitness-client-$_pkgver_full-linux_x64.deb"
     tar -xf data.tar.xz
 }
 
@@ -86,7 +102,7 @@ package() {
     chmod -R 755 "${pkgdir}/usr"
 
     # Make sure executables are executable
-    find "${pkgdir}/opt/networkoptix/client/${pkgver}.41837/bin" -type f -executable -exec chmod 755 {} \;
+    find "${pkgdir}/opt/networkoptix/client/${pkgver}.${_build_number}/bin" -type f -executable -exec chmod 755 {} \;
 }
 
 # vim:set ts=2 sw=2 et:

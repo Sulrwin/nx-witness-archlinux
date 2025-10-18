@@ -16,9 +16,12 @@ Before building this package, you need:
 1. A base Arch Linux system with development tools
 2. Internet connection to download the source package
 3. The `binutils` package (for `ar` command to extract DEB files)
+4. The `curl` package (for automatic version detection)
 
-The PKGBUILD automatically downloads the source from:
-- `https://updates.networkoptix.com/default/41837/linux/nxwitness-client-6.0.6.41837-linux_x64.deb`
+The PKGBUILD automatically detects and downloads the **latest stable version** from:
+- `https://updates.networkoptix.com/default/` (latest stable version)
+
+**New Feature:** This PKGBuild now automatically fetches the newest stable version from the NetworkOptix update site, so you no longer need to manually update version numbers!
 
 ## Building Instructions
 
@@ -27,31 +30,36 @@ The PKGBUILD automatically downloads the source from:
    makepkg -s
    ```
 
-2. Install the package:
+2. Install the package (replace version number with what was built):
    ```bash
-   sudo pacman -U networkoptix-client-6.0.6-1-x86_64.pkg.tar.zst
+   sudo pacman -U networkoptix-client-*.pkg.tar.zst
    ```
 
-**Note:** The SHA256 checksum is currently set to 'SKIP'. If you want to verify the integrity of the downloaded file, you can:
+**Note:** The SHA256 checksum is currently set to 'SKIP' since the version is dynamically detected. If you want to verify the integrity of the downloaded file, you can:
 
-1. Download the file manually and generate its checksum:
+1. After building, check which version was downloaded by examining the PKGBUILD output
+2. Generate the checksum for the specific version that was downloaded:
    ```bash
-   wget https://updates.networkoptix.com/default/41837/linux/nxwitness-client-6.0.6.41837-linux_x64.deb
-   sha256sum nxwitness-client-6.0.6.41837-linux_x64.deb
+   # Example (replace with actual version from build):
+   sha256sum nxwitness-client-X.X.X.XXXXX-linux_x64.deb
    ```
 
-2. Update PKGBUILD with the actual checksum:
+3. Update PKGBUILD with the actual checksum (optional, as SKIP is acceptable for auto-updating packages):
    ```bash
    # Replace sha256sums=('SKIP') with the actual hash
    sha256sums=('your_hash_here')
    ```
 
+Since the version is automatically detected, using 'SKIP' is reasonable as long as you trust the NetworkOptix source.
+
 ## Package Contents
 
 The package installs to:
-- `/opt/networkoptix/client/6.0.6.41837/` - Main application files
+- `/opt/networkoptix/client/X.X.X.XXXXX/` - Main application files (version-specific directory)
 - `/usr/share/applications/` - Desktop integration files
 - `/usr/share/icons/` - Application icons
+
+The installation directory will include the dynamically detected version number.
 
 ## Dependencies
 
