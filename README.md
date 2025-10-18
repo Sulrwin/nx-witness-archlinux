@@ -1,6 +1,8 @@
 # Network Optix Client Arch Linux Package
 
 This directory contains the Arch Linux build files for the Network Optix (Nx Witness) Client.
+Takes the provided deb file and converts to PKG.
+(Faster than building from source lol)
 
 ## Files Included
 
