@@ -1,0 +1,35 @@
+post_install() {
+    xdg-icon-resource forceupdate --theme hicolor &> /dev/null
+
+    ## Copyright 2018-present Network Optix, Inc. Licensed under MPL 2.0: www.mozilla.org/MPL/2.0/
+
+    COMPANY_ID=networkoptix
+    FULLVERSION=6.0.6.41837
+    TARGET=/opt/$COMPANY_ID/client/$FULLVERSION
+
+    if [ -n "$DEBIAN_SCRIPT_DEBUG" ]; then set -v -x; DEBIAN_SCRIPT_TRACE=1; fi
+    ${DEBIAN_SCRIPT_TRACE:+ echo "#42#DEBUG# RUNNING $0 $*" 1>&2 }
+
+    pkill applauncher-bin || true
+    update-desktop-database -q
+}
+
+post_upgrade() {
+    post_install
+}
+
+pre_remove() {
+    ## Copyright 2018-present Network Optix, Inc. Licensed under MPL 2.0: www.mozilla.org/MPL/2.0/
+
+    if [ -n "$DEBIAN_SCRIPT_DEBUG" ]; then set -v -x; DEBIAN_SCRIPT_TRACE=1; fi
+    ${DEBIAN_SCRIPT_TRACE:+ echo "#42#DEBUG# RUNNING $0 $*" 1>&2 }
+
+    pkill applauncher-bin || true
+}
+
+post_remove() {
+    xdg-icon-resource forceupdate --theme hicolor &> /dev/null
+    update-desktop-database -q
+}
+
+# vim:set ts=2 sw=2 et:
