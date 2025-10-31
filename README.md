@@ -9,6 +9,10 @@ Takes the provided deb file and converts to PKG.
 - `PKGBUILD` - Main Arch Linux package build script
 - `networkoptix-client.install` - Installation/Removal script for desktop integration
 - `.SRCINFO` - Package metadata file
+- `Dockerfile` - Docker build environment configuration
+- `docker-compose.yml` - Docker Compose configuration
+- `build.sh` - Simple Docker build script
+- `README-Docker.md` - Detailed Docker documentation
 - `README.md` - This file
 
 ## Prerequisites
@@ -27,6 +31,8 @@ The PKGBUILD automatically detects and downloads the **latest stable version** f
 
 ## Building Instructions
 
+### Option 1: Native Arch Linux Build
+
 1. Build the package (will automatically download the source):
    ```bash
    makepkg -s
@@ -36,6 +42,35 @@ The PKGBUILD automatically detects and downloads the **latest stable version** f
    ```bash
    sudo pacman -U networkoptix-client-*.pkg.tar.zst
    ```
+
+### Option 2: Docker Build (Recommended)
+
+The Docker method provides an isolated build environment that works on any system with Docker installed.
+
+**Quick Start:**
+```bash
+# Clone and build using the provided script
+git clone https://github.com/Sulrwin/nx-witness-archlinux.git
+cd nx-witness-archlinux
+./build.sh
+```
+
+**Alternative Docker Commands:**
+```bash
+# Using Docker Compose
+docker-compose run --rm nx-witness-builder
+
+# Interactive shell for debugging
+docker-compose run --rm nx-witness-shell
+```
+
+**Docker Benefits:**
+- Isolated build environment (no system dependencies required)
+- Cross-platform compatibility (works on Linux, macOS, Windows)
+- Reproducible builds
+- Clean output directory
+
+For detailed Docker instructions, see [README-Docker.md](README-Docker.md).
 
 **Note:** The SHA256 checksum is currently set to 'SKIP' since the version is dynamically detected. If you want to verify the integrity of the downloaded file, you can:
 
@@ -53,6 +88,8 @@ The PKGBUILD automatically detects and downloads the **latest stable version** f
    ```
 
 Since the version is automatically detected, using 'SKIP' is reasonable as long as you trust the NetworkOptix source.
+
+**Docker Output:** When using Docker, the built package will be placed in the `output/` directory.
 
 ## Package Contents
 

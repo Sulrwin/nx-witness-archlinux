@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  nx-witness-builder:
+    build: .
+    image: nx-witness-archlinux-builder
+    container_name: nx-witness-build
+    volumes:
+      - ./output:/home/builder/output
+    command: makepkg -s --noconfirm
+    environment:
+      - MAKEFLAGS=-j$(nproc)
+    working_dir: /home/builder
+
+  nx-witness-shell:
+    build: .
+    image: nx-witness-archlinux-builder
+    container_name: nx-witness-shell
+    volumes:
+      - .:/home/builder
+      - ./output:/home/builder/output
+    command: /bin/bash
+    environment:
+      - MAKEFLAGS=-j$(nproc)
+    stdin_open: true
+    tty: true

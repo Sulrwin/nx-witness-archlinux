@@ -1,0 +1,21 @@
+# Ignore .git directory
+.git
+
+# Ignore output directory
+output/
+
+# Ignore any built packages
+*.pkg.tar.zst
+*.pkg.tar.xz
+
+# Ignore temporary files
+*.tmp
+*.log
+
+# Ignore Docker-related files
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Ignore build script
+build.sh
