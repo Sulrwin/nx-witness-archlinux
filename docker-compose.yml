@@ -6,8 +6,9 @@ services:
     image: nx-witness-archlinux-builder
     container_name: nx-witness-build
     volumes:
+      - .:/home/builder
       - ./output:/home/builder/output
-    command: makepkg -s --noconfirm
+    command: bash -c "makepkg -s --noconfirm && mv *.pkg.tar.zst /home/builder/output/ 2>/dev/null || true && ls -la /home/builder/output/"
     environment:
       - MAKEFLAGS=-j$(nproc)
     working_dir: /home/builder

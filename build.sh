@@ -18,11 +18,4 @@ docker-compose build nx-witness-builder
 echo "🔨 Building the package..."
 docker-compose run --rm nx-witness-builder
 
-# Move the built package to output directory
-echo "📋 Moving built package to output directory..."
-docker-compose run --rm nx-witness-shell bash -c "
-    mv *.pkg.tar.zst /home/builder/output/ 2>/dev/null || true
-    ls -la /home/builder/output/
-"
-
 echo "✅ Build complete! Check the 'output' directory for the package."
